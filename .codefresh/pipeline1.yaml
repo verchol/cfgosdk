@@ -1,0 +1,49 @@
+version: '1.0'
+kind: pipeline
+metadata:
+  name: codefresh-io/verchol/test1999
+  labels: {}
+  project: codefresh-io/verchol/gobuild
+  originalYamlString: |
+    version: '1.0'
+
+    stages:
+    - git 
+    - build
+    - test
+    - deploy
+    contexts:
+       - git context :
+          repo: ...
+          token : Integration.
+       - Kube
+       - Docker Regisry
+       - Helm Repo
+       - Others ....
+
+
+    steps:
+      # Optional step as the pipeline will automatically checkout the connected git repo if present
+      gitClone:
+        context : 
+            -  Project.mygit
+      MyAppDockerImage:
+        title: Building Docker Image
+        type: build
+        stage: build
+        context:
+         -   - mydockerRepo
+
+
+
+      
+      # Optional step as each pipeline automatically pushes to the Codefresh internal Registry
+      PushingToRegistry:
+        type: push
+        stage: deploy
+        title: Pushing To Registry
+        candidate: ${{MyAppDockerImage}}
+        registry: my-registry # Connect registries in account integrations
+        tag: '${{CF_BRANCH}}'
+
+
