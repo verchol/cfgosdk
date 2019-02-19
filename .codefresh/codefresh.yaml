@@ -6,11 +6,7 @@ steps:
     working_directory: ${{main_clone}}
     description: Performing unit tests...
     commands:
-      - export GO111MODULE=on 
-      - go mod download
-      - go build main.go
-      - go test ./pkg/util
-      - go run main.go
+      - sh ./.codefresh/perform_tests_logic.sh
   build_image:
     type: build
     description: Building the image...
